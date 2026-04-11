@@ -21,42 +21,6 @@ When someone on stage hits "Iniciar Batalla", every phone in the room switches f
 - Supabase Edge Functions (admin actions)
 - PWA (works as an installable app, fast on mobile data)
 
-## Setup
-
-### 1. Supabase
-
-Create a project at [supabase.com](https://supabase.com), then run the SQL in `supabase/schema.sql` from the SQL Editor.
-
-Enable Realtime on both tables: Dashboard → Database → Publications → `supabase_realtime` → toggle on `votos` and `app_state`.
-
-### 2. Environment
-
-Copy your project URL and anon key into `.env.local`:
-
-```
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key
-```
-
-### 3. Edge Function
-
-```bash
-npm install -g supabase
-supabase login
-supabase link --project-ref your-project-ref
-supabase secrets set ADMIN_TOKEN=your-secret-token
-supabase functions deploy admin-action
-```
-
-The admin token is whatever string you want. Keep it somewhere safe — it goes in the URL the comedians bookmark.
-
-### 4. Run
-
-```bash
-npm install
-npm run dev
-```
-
 ## Admin URL
 
 After deploying, the admin link looks like:
