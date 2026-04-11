@@ -26,10 +26,9 @@ When someone on stage hits "Iniciar Batalla", every phone in the room switches f
 After deploying, the admin link looks like:
 
 ```
-https://your-app.com/admin?token=your-secret-token
+https://your-app.com/admin?token=secret-token
 ```
 
-Bookmark it on the phones before the show.
 
 ## Vote deduplication
 
