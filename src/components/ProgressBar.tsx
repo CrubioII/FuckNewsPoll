@@ -3,9 +3,10 @@ interface ProgressBarProps {
   camiloCount: number
   total: number
   showExactCounts?: boolean
+  winner?: 'mago' | 'camilo'
 }
 
-export default function ProgressBar({ magoCount, camiloCount, total, showExactCounts = false }: ProgressBarProps) {
+export default function ProgressBar({ magoCount, camiloCount, total, showExactCounts = false, winner }: ProgressBarProps) {
   const magoPercent = total > 0 ? (magoCount / total) * 100 : 50
   const camiloPercent = total > 0 ? (camiloCount / total) * 100 : 50
 
@@ -37,9 +38,13 @@ export default function ProgressBar({ magoCount, camiloCount, total, showExactCo
           style={{
             width: `${magoPercent}%`,
             background: 'linear-gradient(180deg, #FF2020 0%, #CC0000 50%, #990000 100%)',
-            boxShadow: '0 0 15px rgba(255, 0, 0, 0.3)',
+            boxShadow: winner === 'mago'
+              ? '0 0 30px rgba(255,0,0,0.8), 0 0 60px rgba(255,0,0,0.4)'
+              : '0 0 15px rgba(255, 0, 0, 0.3)',
             transition: 'width 500ms cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
+            animation: winner === 'mago' ? 'pulse-glow 2s ease-in-out infinite' : 'none',
+            '--glow-color': '#FF0000',
+          } as React.CSSProperties}
         >
           {/* Glossy sheen */}
           <div
@@ -62,9 +67,13 @@ export default function ProgressBar({ magoCount, camiloCount, total, showExactCo
           style={{
             width: `${camiloPercent}%`,
             background: 'linear-gradient(180deg, #0057D4 0%, #0047AB 50%, #003580 100%)',
-            boxShadow: '0 0 15px rgba(0, 71, 171, 0.3)',
+            boxShadow: winner === 'camilo'
+              ? '0 0 30px rgba(0,71,171,0.8), 0 0 60px rgba(0,71,171,0.4)'
+              : '0 0 15px rgba(0, 71, 171, 0.3)',
             transition: 'width 500ms cubic-bezier(0.4, 0, 0.2, 1)',
-          }}
+            animation: winner === 'camilo' ? 'pulse-glow 2s ease-in-out infinite' : 'none',
+            '--glow-color': '#0047AB',
+          } as React.CSSProperties}
         >
           <div
             className="absolute inset-0 pointer-events-none"

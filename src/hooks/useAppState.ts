@@ -4,6 +4,7 @@ import { setHasVoted } from '../lib/device'
 
 export function useAppState() {
   const [isActiveRound, setIsActiveRound] = useState(false)
+  const [winner, setWinner] = useState<'mago' | 'camilo' | null>(null)
   const [loading, setLoading] = useState(true)
   const prevActiveRef = useRef(false)
 
@@ -11,12 +12,13 @@ export function useAppState() {
     // Fetch initial state
     supabase
       .from('app_state')
-      .select('is_active_round')
+      .select('is_active_round, winner')
       .eq('id', 1)
       .single()
       .then(({ data }) => {
         if (data) {
           setIsActiveRound(data.is_active_round)
+          setWinner(data.winner as 'mago' | 'camilo' | null)
           prevActiveRef.current = data.is_active_round
         }
         setLoading(false)
@@ -35,12 +37,14 @@ export function useAppState() {
         },
         (payload) => {
           const newActive = payload.new.is_active_round as boolean
+          const newWinner = payload.new.winner as 'mago' | 'camilo' | null
           // If a new round starts, clear the has-voted flag
           if (newActive && !prevActiveRef.current) {
             setHasVoted(false)
           }
           prevActiveRef.current = newActive
           setIsActiveRound(newActive)
+          setWinner(newWinner ?? null)
         }
       )
       .subscribe()
@@ -50,5 +54,5 @@ export function useAppState() {
     }
   }, [])
 
-  return { isActiveRound, loading }
+  return { isActiveRound, winner, loading }
 }

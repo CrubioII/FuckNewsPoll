@@ -15,6 +15,21 @@
   --font-serif: 'Playfair Display', 'Georgia', serif;
 }
 
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: true;
+  initial-value: 0turn;
+}
+
+@keyframes border-beam {
+  to { --border-angle: 1turn; }
+}
+
+@keyframes beam-travel {
+  from { stroke-dashoffset: 0; }
+  to { stroke-dashoffset: calc(-1 * var(--p)); }
+}
+
 @keyframes breathe {
   0%, 100% { opacity: 0.4; transform: scale(1); }
   50% { opacity: 1; transform: scale(1.02); }
@@ -48,6 +63,34 @@
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100vh); }
+}
+
+@keyframes emoji-fall {
+  0%   { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+@keyframes text-glow-pulse {
+  0%, 100% {
+    text-shadow:
+      0 0 10px var(--text-glow, #fff),
+      0 0 30px var(--text-glow, #fff),
+      0 0 60px var(--text-glow, #fff);
+  }
+  50% {
+    text-shadow:
+      0 0 20px var(--text-glow, #fff),
+      0 0 50px var(--text-glow, #fff),
+      0 0 100px var(--text-glow, #fff),
+      0 0 160px var(--text-glow, #fff);
+  }
+}
+
+@keyframes winner-reveal {
+  0%   { opacity: 0; transform: translateY(30px) scale(0.85); }
+  60%  { transform: translateY(-4px) scale(1.03); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 @keyframes confirmed-pop {

@@ -4,9 +4,10 @@ import { useVoteCounts } from '../hooks/useVoteCounts'
 import { useVote } from '../hooks/useVote'
 import IdleScreen from '../components/IdleScreen'
 import VotingScreen from '../components/VotingScreen'
+import WinnerScreen from '../components/WinnerScreen'
 
 export default function AudiencePage() {
-  const { isActiveRound, loading } = useAppState()
+  const { isActiveRound, winner, loading } = useAppState()
   const { magoCount, camiloCount, total } = useVoteCounts()
   const { hasVoted, voting, error, vote, resetVoteState } = useVote()
 
@@ -24,6 +25,17 @@ export default function AudiencePage() {
           className="w-6 h-6 rounded-full border-2 border-gold/30 border-t-gold animate-spin"
         />
       </div>
+    )
+  }
+
+  if (!isActiveRound && winner) {
+    return (
+      <WinnerScreen
+        winner={winner}
+        magoCount={magoCount}
+        camiloCount={camiloCount}
+        total={total}
+      />
     )
   }
 

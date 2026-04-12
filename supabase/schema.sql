@@ -7,8 +7,12 @@
 CREATE TABLE app_state (
   id INT PRIMARY KEY DEFAULT 1 CHECK (id = 1),
   is_active_round BOOLEAN NOT NULL DEFAULT FALSE,
+  winner TEXT CHECK (winner IN ('mago', 'camilo')),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 );
+
+-- Migration (run if table already exists):
+-- ALTER TABLE app_state ADD COLUMN winner TEXT CHECK (winner IN ('mago', 'camilo'));
 
 INSERT INTO app_state (id, is_active_round) VALUES (1, FALSE);
 
