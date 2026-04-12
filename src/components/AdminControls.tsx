@@ -8,9 +8,7 @@ interface AdminControlsProps {
 
 export default function AdminControls({ isActiveRound, onStart, onStop, onReset, loading }: AdminControlsProps) {
   function handleReset() {
-    if (window.confirm('¿Resetear todos los votos? Esta acción no se puede deshacer.')) {
-      onReset()
-    }
+    onReset()
   }
 
   return (

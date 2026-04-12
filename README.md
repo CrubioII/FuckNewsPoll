@@ -13,6 +13,8 @@ Two URLs:
 
 When someone on stage hits "Iniciar Batalla", every phone in the room switches from the waiting screen to voting mode in under a second. No refresh needed.
 
+When the round ends, every screen switches to a winner reveal — animated emoji rain, glowing name, final vote counts.
+
 ## Stack
 
 - React + TypeScript + Vite
