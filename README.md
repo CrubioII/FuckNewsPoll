@@ -28,7 +28,7 @@ When the round ends, every screen switches to a winner reveal — animated emoji
 After deploying, the admin link looks like:
 
 ```
-https://your-app.com/admin?token=secret-token
+https://fknews.lat/admin?token=secret-token
 ```
 
 

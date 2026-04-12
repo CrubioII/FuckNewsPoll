@@ -15,6 +15,10 @@ dist-ssr
 # Supabase CLI temp files
 supabase/.temp/
 
+# AI Assistant files
+CLAUDE.md
+.claude/
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
