@@ -15,13 +15,23 @@ When someone on stage hits "Iniciar Batalla", every phone in the room switches f
 
 When the round ends, every screen switches to a winner reveal — animated emoji rain, glowing name, final vote counts.
 
+## Architecture
+
+![Diagrama de Despliegue](despliegue.jpg)
+
 ## Stack
 
-- React + TypeScript + Vite
-- Tailwind CSS
-- Supabase (Postgres + Realtime subscriptions)
-- Supabase Edge Functions (admin actions)
-- PWA (works as an installable app, fast on mobile data)
+- **Frontend:** React + TypeScript + Vite
+- **Styling:** Tailwind CSS
+- **Database:** Azure SQL (T-SQL) with Real-time Triggers ($O(1)$ performance)
+- **Backend:** Node.js (Express) on Azure App Service
+- **Auth:** Microsoft Entra ID (Managed Identity) for DB access
+- **PWA:** Optimized for mobile data during live shows
+
+## Performance Optimization
+
+The app is designed to handle **2,000 concurrent users** during a live show. Instead of performing expensive `COUNT(*)` operations on every load, we use a dedicated `resultados_votos` table that is updated atomically by database triggers. This reduces the initial load time to **under 200ms**.
+
 
 ## Admin URL
 

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { supabase } from '../lib/supabase'
+import { submitVote } from '../lib/api'
 import { getDeviceId, getHasVoted, setHasVoted } from '../lib/device'
 
 type Comediante = 'mago' | 'camilo'
@@ -17,27 +17,22 @@ export function useVote() {
 
     const deviceId = getDeviceId()
 
-    const { error: insertError } = await supabase
-      .from('votos')
-      .insert({ comediante, device_id: deviceId })
-
-    if (insertError) {
-      // Unique constraint violation = already voted
-      if (insertError.code === '23505') {
+    try {
+      const { alreadyVoted } = await submitVote(comediante, deviceId)
+      if (alreadyVoted) {
         setHasVoted(true)
         setHasVotedState(true)
       } else {
-        setError('Error al votar. Intenta de nuevo.')
+        setHasVoted(true)
+        setHasVotedState(true)
       }
-    } else {
-      setHasVoted(true)
-      setHasVotedState(true)
+    } catch {
+      setError('Error al votar. Intenta de nuevo.')
+    } finally {
+      setVoting(false)
     }
-
-    setVoting(false)
   }
 
-  // Allow resetting state when a new round starts
   function resetVoteState() {
     setHasVotedState(getHasVoted())
     setError(null)

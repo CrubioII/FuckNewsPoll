@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { supabase } from '../lib/supabase'
+import { fetchState } from '../lib/api'
 import { setHasVoted } from '../lib/device'
 
 export function useAppState() {
@@ -9,49 +9,26 @@ export function useAppState() {
   const prevActiveRef = useRef(false)
 
   useEffect(() => {
-    // Fetch initial state
-    supabase
-      .from('app_state')
-      .select('is_active_round, winner')
-      .eq('id', 1)
-      .single()
-      .then(({ data }) => {
-        if (data) {
-          setIsActiveRound(data.is_active_round)
-          setWinner(data.winner as 'mago' | 'camilo' | null)
-          prevActiveRef.current = data.is_active_round
+    async function loadState() {
+      try {
+        const data = await fetchState()
+        const newActive = data.isActiveRound
+        if (newActive && !prevActiveRef.current) {
+          setHasVoted(false)
         }
+        prevActiveRef.current = newActive
+        setIsActiveRound(newActive)
+        setWinner(data.winner)
+      } catch {
+        // fail silently on poll error
+      } finally {
         setLoading(false)
-      })
-
-    // Subscribe to realtime updates
-    const channel = supabase
-      .channel('app-state')
-      .on(
-        'postgres_changes',
-        {
-          event: 'UPDATE',
-          schema: 'public',
-          table: 'app_state',
-          filter: 'id=eq.1',
-        },
-        (payload) => {
-          const newActive = payload.new.is_active_round as boolean
-          const newWinner = payload.new.winner as 'mago' | 'camilo' | null
-          // If a new round starts, clear the has-voted flag
-          if (newActive && !prevActiveRef.current) {
-            setHasVoted(false)
-          }
-          prevActiveRef.current = newActive
-          setIsActiveRound(newActive)
-          setWinner(newWinner ?? null)
-        }
-      )
-      .subscribe()
-
-    return () => {
-      supabase.removeChannel(channel)
+      }
     }
+
+    loadState()
+    const interval = setInterval(loadState, 3000)
+    return () => clearInterval(interval)
   }, [])
 
   return { isActiveRound, winner, loading }
