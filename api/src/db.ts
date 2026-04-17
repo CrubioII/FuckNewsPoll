@@ -1,17 +1,21 @@
 import sql from 'mssql'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const config: sql.config = {
   server: process.env.DB_SERVER!,
   database: process.env.DB_NAME!,
+  authentication: {
+    type: 'azure-active-directory-default', // Usa credenciales de Azure CLI (az login)
+  },
   options: {
     encrypt: true,             // Requerido por Azure SQL
-    trustServerCertificate: false,
+    trustServerCertificate: true, // Requerido para pruebas locales
+    connectTimeout: 30000,
   },
-   authentication: {
-         type: 'azure-active-directory-msi-app-service', // <-- Esto activa la magia
-      },
   pool: {
-    max: 10,
+    max: 30,
     min: 0,
     idleTimeoutMillis: 30000,
   },

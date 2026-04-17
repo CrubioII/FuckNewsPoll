@@ -4,6 +4,7 @@ import { getDb } from '../db'
 const router = Router()
 
 router.get('/', async (_, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
   try {
     const result = await getDb().request().query(`
       SELECT mago_count, camilo_count, total FROM resultados_votos WHERE id = 1

@@ -1,13 +1,13 @@
+import dotenv from 'dotenv'
+dotenv.config()
+
 import express from 'express'
 import cors from 'cors'
-import dotenv from 'dotenv'
 import { initDb } from './db'
 import stateRouter from './routes/state'
 import countsRouter from './routes/counts'
 import voteRouter from './routes/vote'
 import adminRouter from './routes/admin'
-
-dotenv.config()
 
 const app = express()
 const PORT = Number(process.env.PORT) || 3001
@@ -16,6 +16,8 @@ app.use(cors({
   origin: process.env.ALLOWED_ORIGINS
     ? process.env.ALLOWED_ORIGINS.split(',')
     : '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
 }))
 app.use(express.json())
 

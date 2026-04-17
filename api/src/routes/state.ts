@@ -4,6 +4,7 @@ import { getDb } from '../db'
 const router = Router()
 
 router.get('/', async (_, res) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate')
   try {
     const result = await getDb().request().query(`
       SELECT is_active_round, winner FROM app_state WHERE id = 1
