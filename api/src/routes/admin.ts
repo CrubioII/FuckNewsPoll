@@ -2,6 +2,9 @@ import { Router } from 'express'
 import sql from 'mssql'
 import { getDb } from '../db'
 import { requireAdmin } from '../middleware/auth'
+import { invalidateStateCache } from './state'
+import { invalidateCountsCache } from './counts'
+import { resetQueue } from '../voteQueue'
 
 const router = Router()
 
@@ -38,6 +41,7 @@ router.post('/:action', requireAdmin, async (req, res) => {
       }
 
       case 'reset': {
+        resetQueue()
         await db.request().query(`DELETE FROM votos`)
         await db.request().query(`
           UPDATE app_state
@@ -52,6 +56,8 @@ router.post('/:action', requireAdmin, async (req, res) => {
         return
     }
 
+    invalidateStateCache()
+    invalidateCountsCache()
     res.json({ success: true })
   } catch (err) {
     console.error(`POST /admin/${action} error:`, err)

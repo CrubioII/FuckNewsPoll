@@ -1,10 +1,9 @@
 import { Router } from 'express'
-import sql from 'mssql'
-import { getDb } from '../db'
+import { enqueueVote } from '../voteQueue'
 
 const router = Router()
 
-router.post('/', async (req, res) => {
+router.post('/', (req, res) => {
   const { comediante, device_id } = req.body
 
   if (!comediante || !['mago', 'camilo'].includes(comediante)) {
@@ -16,22 +15,12 @@ router.post('/', async (req, res) => {
     return
   }
 
-  try {
-    await getDb().request()
-      .input('comediante', sql.VarChar(10), comediante)
-      .input('device_id', sql.VarChar(64), device_id)
-      .query(`INSERT INTO votos (comediante, device_id) VALUES (@comediante, @device_id)`)
-
-    res.status(201).json({ success: true })
-  } catch (err: any) {
-    // SQL Server unique constraint violation = error number 2627
-    if (err.number === 2627) {
-      res.status(409).json({ error: 'already_voted' })
-      return
-    }
-    console.error('POST /vote error:', err)
-    res.status(500).json({ error: 'Server error' })
+  const result = enqueueVote(comediante, device_id)
+  if (result === 'duplicate') {
+    res.status(409).json({ error: 'already_voted' })
+    return
   }
+  res.status(201).json({ success: true })
 })
 
 export default router

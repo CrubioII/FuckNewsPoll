@@ -15,9 +15,10 @@ const config: sql.config = {
     connectTimeout: 30000,
   },
   pool: {
-    max: 30,
-    min: 0,
+    max: 20,
+    min: 2,
     idleTimeoutMillis: 30000,
+    acquireTimeoutMillis: 15000,
   },
 }
 
