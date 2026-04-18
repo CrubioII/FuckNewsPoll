@@ -1,26 +1,23 @@
-═══════════════════════════════════════════════
-  RESULTS
-═══════════════════════════════════════════════
-  Total users    : 2000
-  Wall time      : 9.32s
-  Throughput     : 215 users/s
-  Errors         : 0
-  Votes accepted : 2000
-  Votes duplicate: 0
+## Overall Throughput
 
-  PAGE LOAD (state + counts parallel)  [ms]
-    min  : 21
-    avg  : 387
-    p50  : 363
-    p95  : 722
-    p99  : 752
-    max  : 763
+| Total Users | $2000$ |
+| --- | --- |
+| Wait Time | $9.32s$ |
+| Rendimiento | $215$ users/s  |
+| Errores | 0 |
+| Votes Accepted | 2000 |
+| Votes duplicated | 0 |
 
-  VOTE SUBMIT (POST /api/vote)          [ms]
-    min  : 1
-    avg  : 34
-    p50  : 30
-    p95  : 77
-    p99  : 96
-    max  : 111
-═══════════════════════════════════════════════
+## **Page Load**
+
+| min | $21ms$ |
+| --- | --- |
+| avg | $387ms$ |
+| MAX | $763ms$  |
+
+## Vote Submit `POST`
+
+| min | $1ms$ |
+| --- | --- |
+| avg | $34ms$ |
+| MAX | $111ms$  |
