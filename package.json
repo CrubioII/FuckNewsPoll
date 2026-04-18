@@ -2,10 +2,10 @@
   "name": "fucknewspoll-temp",
   "private": true,
   "version": "0.0.0",
-  "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && cd api && npm install && npm run build",
+    "start": "cd api && NODE_ENV=production node dist/index.js",
     "lint": "eslint .",
     "preview": "vite preview"
   },

@@ -6,9 +6,8 @@ dotenv.config()
 const config: sql.config = {
   server: process.env.DB_SERVER!,
   database: process.env.DB_NAME!,
-  authentication: {
-    type: 'azure-active-directory-default', // Usa credenciales de Azure CLI (az login)
-  },
+  user: process.env.DB_USER!,
+  password: process.env.DB_PASSWORD!,
   options: {
     encrypt: true,             // Requerido por Azure SQL
     trustServerCertificate: true, // Requerido para pruebas locales

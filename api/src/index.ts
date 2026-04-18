@@ -3,6 +3,7 @@ dotenv.config()
 
 import express from 'express'
 import cors from 'cors'
+import path from 'path'
 import { initDb } from './db'
 import stateRouter from './routes/state'
 import countsRouter from './routes/counts'
@@ -21,11 +22,16 @@ app.use(cors({
 }))
 app.use(express.json())
 
+const distPath = path.join(__dirname, '..', '..', 'dist')
+app.use(express.static(distPath))
+
 app.get('/health', (_, res) => res.json({ ok: true }))
 app.use('/api/state', stateRouter)
 app.use('/api/counts', countsRouter)
 app.use('/api/vote', voteRouter)
 app.use('/api/admin', adminRouter)
+
+app.get('*', (_, res) => res.sendFile(path.join(distPath, 'index.html')))
 
 async function start() {
   try {
