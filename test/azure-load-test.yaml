@@ -1,0 +1,53 @@
+version: v0.1
+testName: FuckNewsPoll Load Test
+testPlan: fucknewspoll-loadtest.jmx
+description: >
+  Availability + response time under 2000 iterations (100 threads × 20 loops).
+  DB at minimum SKU (Azure SQL Basic / serverless min). Error threshold 5%.
+
+engineInstances: 1
+
+# Override these with your deployed URL before running
+env:
+  - name: host
+    value: fksnews.lat
+  - name: port
+    value: "443"
+  - name: protocol
+    value: https
+
+# Test FAILS if any of these thresholds breach
+failureCriteria:
+  # > 5% of all requests fail = implementation error
+  - metric: error
+    aggregate: percentage
+    condition: ">"
+    value: 5
+
+  # Availability: /health must respond in < 2s at p95
+  - requestName: "[AVAILABILITY] GET /health"
+    metric: response_time_ms
+    aggregate: p95
+    condition: ">"
+    value: 2000
+
+  # App response time: /api/state must respond in < 3s at p95
+  - requestName: "[APP] GET /api/state"
+    metric: response_time_ms
+    aggregate: p95
+    condition: ">"
+    value: 3000
+
+  # DB read: /api/counts must respond in < 3s at p95
+  - requestName: "[DB-READ] GET /api/counts"
+    metric: response_time_ms
+    aggregate: p95
+    condition: ">"
+    value: 3000
+
+  # DB write: /api/vote must respond in < 5s at p95
+  - requestName: "[DB-WRITE] POST /api/vote"
+    metric: response_time_ms
+    aggregate: p95
+    condition: ">"
+    value: 5000
